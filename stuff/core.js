@@ -1,13 +1,4 @@
 
-let tohex = (x) => x.toString(16).padStart(2, '0'); 
-
-const br = "<br>";
-let output;
-
-const process = (file, data) => {
-	output.innerHTML = file.name;
-}
-
 window.addEventListener("DOMContentLoaded", () => {
 	const droptarg = document;
 	const cont = document.getElementById("containment");
@@ -22,11 +13,10 @@ window.addEventListener("DOMContentLoaded", () => {
 			if (item.kind === 'file') {
 				const file = item.getAsFile();
 				const r = new FileReader();
-				//r.readAsArrayBuffer(file);
-				//r.readAsBinaryString(file);
-				r.readAsText(file);
+				r.readAsArrayBuffer(file);
 				r.onload = () => {
-					process(file, r.result);
+					const data = new Uint8Array(r.result);
+					process(file, data);
 				};
 			}
 		});
