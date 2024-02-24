@@ -27,6 +27,7 @@ canvas {
 	background: #1f1f1f;
 	margin-bottom: 3em;
 	overflow: auto;
+	border-radius: 24px;
 }
 .flex {
 	display: flex;
@@ -36,6 +37,9 @@ canvas {
 	gap: 24px;
 	justify-content: flex-start;
 	align-items: flex-start;
+}
+.flex div {
+	overflow: auto;
 }
 .monospace {
 	font-family: monospace;
