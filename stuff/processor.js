@@ -1,25 +1,7 @@
 
-let element_new = (t) => document.createElement(t);
-let frame_next = () => { return new Promise(resolve => requestAnimationFrame(resolve)); }
-let tohex = (x) => x.toString(16).padStart(2, '0'); 
+const theme = themes.cool;
 
-mapnick = [ 'NROM', 'MMC1', 'UNROM', 'CNROM', 'MMC3', 'MMC5', 'Super Magic Card', 'AxROM', 
-            'Super Magic Card', 'MMC2', 'MMC4', 'Color Dreams', 'Gouder', 'CPROM', 'Gouder', 
-				'K-1029/K-1030P', 'Bandai FCG', 'Super Magic Card', 'Jaleco SS 88006', 
-				'Namco 129/163', 'FDS', 'VRC2/VRC4', 'VRC2/VRC4', 'VRC2/VRC4', 'VRC6', 'VRC2/VRC4', 
-				'VRC6', 'Pir8 VRC4', 'Action 53', 'CUFROM', 'UNROM 512', 'NSF Comp' ];
-mapprg = [      16,     16,     16,       32,      8,      8,         8,              32,  
-                   8,             8,       16,    32,              8,          32,     8, 
-                16, 16, 8, 8, 8, 16, 8, 8, 8, 8, 8, 8, 8, 16, 16, 16, 4 ];
-mapchr = [      8,      8,      8,       8,      1,      1,            1,            8,               
-                1,                4,       4,           8,          8,        4,      1,  
-                8,  1, 8, 1, 1,  8, 1, 1, 1, 1, 1, 1, 1,  8,  8,  8, 8 ];
-
-const theme = themes.mirage;
-const br = "<br>";
-let output;
-
-const process = async (file, data) => {
+const processor_engine_go = async () => {
 	let div, box;
 	// read header info
 	let mapper_id, prg_size, chr_size;
@@ -46,6 +28,8 @@ const process = async (file, data) => {
 	prg_bank_size *= 1024;
 	chr_bank_size *= 1024;
 
+	let header = document.querySelector('header');
+	header.innerHTML = '<div><h1>NES Banks Peeker</h1></div>';
 	div = element_new('div');
 	div.classList.add('flex');
 	box = element_new('div');
@@ -65,12 +49,13 @@ const process = async (file, data) => {
 	box = element_new('div');
 	box.innerHTML = data[5] * 8 + 'kb CHR';
 	div.appendChild(box);
-	output.appendChild(div);
+	header.appendChild(div);
 
 	// draw some chr banks
 	div = element_new('div');
 	div.classList.add("flex");
 	output.appendChild(div);
+	let bitcolors = [ 0, 85, 170, 255 ]
 	for (let i = 0; i < chr_banks; i++) {
 		let bank = element_new('div');
 		bank.innerHTML = "<span class='monospace'>CHR $" + tohex(i) + "</span></br>";
@@ -93,7 +78,7 @@ const process = async (file, data) => {
 				for (let l = 7; l >= 0; l--) {
 					let val = (lo & (1 << l)) ? 1 : 0;
 					val |= (hi & (1 << l)) ? 2 : 0;
-					val <<= 6;
+					val = bitcolors[val];
 					con.fillStyle = theme[val];
 					con.fillRect(x + 7 - l, y + k, 1, 1);
 				}
@@ -105,6 +90,7 @@ const process = async (file, data) => {
 		bank.appendChild(can);
 		div.appendChild(bank);
 		await frame_next();
+		tobottom();
 	}
 
 	// draw some prg banks
@@ -129,6 +115,7 @@ const process = async (file, data) => {
 		bank.appendChild(can);
 		div.appendChild(bank);
 		await frame_next();
+		tobottom();
 	}
 
 }

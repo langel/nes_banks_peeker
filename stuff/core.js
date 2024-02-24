@@ -1,3 +1,4 @@
+let file, data, output;
 
 window.addEventListener("DOMContentLoaded", () => {
 	const droptarg = document;
@@ -11,12 +12,12 @@ window.addEventListener("DOMContentLoaded", () => {
 		output.innerHTML = '';
 		[...e.dataTransfer.items].forEach((item, i) => {
 			if (item.kind === 'file') {
-				const file = item.getAsFile();
+				file = item.getAsFile();
 				const r = new FileReader();
 				r.readAsArrayBuffer(file);
 				r.onload = () => {
-					const data = new Uint8Array(r.result);
-					process(file, data);
+					data = new Uint8Array(r.result);
+					processor_engine_go();
 				};
 			}
 		});
