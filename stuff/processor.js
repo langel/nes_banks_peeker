@@ -13,41 +13,38 @@ const processor_engine_go = async () => {
 	else return output.innerHTML += 'ROM FAIL :: ' + file.name;
 
 	let mapper_type = 'undefined';
-	let prg_bank_size = 16;
-	let chr_bank_size = 8;
+	let prg_bank_kb_size = 16;
+	let chr_bank_kb_size = 8;
 	if (mapper_id < mapnick.length) {
 		mapper_type = mapnick[mapper_id];
-		prg_bank_size = mapprg[mapper_id];
-		chr_bank_size = mapchr[mapper_id];
+		prg_bank_kb_size = mapprg[mapper_id];
+		chr_bank_kb_size = mapchr[mapper_id];
 	}
-	let prg_banks = prg_size / prg_bank_size;
+	let prg_banks = prg_size / prg_bank_kb_size;
 	let chr_banks = 0;
-	if (chr_size > 0) chr_banks = chr_size / chr_bank_size;
+	if (chr_size > 0) chr_banks = chr_size / chr_bank_kb_size;
 	prg_size *= 1024;
 	chr_size *= 1024;
-	prg_bank_size *= 1024;
-	chr_bank_size *= 1024;
+	let prg_bank_size = prg_bank_kb_size * 1024;
+	let chr_bank_size = chr_bank_kb_size * 1024;
 
 	let header = document.querySelector('header');
 	header.innerHTML = '<div><h1>NES Banks Peeker</h1></div>';
 	div = element_new('div');
 	div.classList.add('flex');
 	box = element_new('div');
-	box.innerHTML = file.name;
+	box.innerHTML = file.name + '<br>' + ((file.size - 16) >> 10) + 'kb';
 	div.appendChild(box);
 	box = element_new('div');
-	box.innerHTML = 'Mapper ' + mapper_id;
-	div.appendChild(box);
-	box = element_new('div');
-	box.innerHTML = mapper_type;
+	box.innerHTML = 'Mapper ' + mapper_id + '<br>' + mapper_type;
 	div.appendChild(box);
 	output.appendChild(div);
 	box = element_new('div');
-	box.innerHTML = data[4] * 16 + 'kb PRG';
+	box.innerHTML = 'PRG ' + data[4] * 16 + 'kb<br>' + chr_bank_kb_size + 'kb &times; ' + prg_banks + ' banks';
 	div.appendChild(box);
 	output.appendChild(div);
 	box = element_new('div');
-	box.innerHTML = data[5] * 8 + 'kb CHR';
+	box.innerHTML = 'CHR ' + data[4] * 16 + 'kb<br>' + chr_bank_kb_size + 'kb &times; ' + chr_banks + ' banks';
 	div.appendChild(box);
 	header.appendChild(div);
 
