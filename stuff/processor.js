@@ -1,6 +1,11 @@
 
 const theme = themes.cool;
 
+const process_canvas_from_chr_bank = async (data, offset, size) => {
+}
+const process_canvas_from_prg_bank = async (data, offset, size) => {
+}
+
 const processor_engine_go = async () => {
 	let div, box;
 	// read header info
@@ -28,25 +33,20 @@ const processor_engine_go = async () => {
 	let prg_bank_size = prg_bank_kb_size * 1024;
 	let chr_bank_size = chr_bank_kb_size * 1024;
 
-	let header = document.querySelector('header');
-	header.innerHTML = '<div><h1>NES Banks Peeker</h1></div>';
-	div = element_new('div');
-	div.classList.add('flex');
+	div = document.getElementById('stats');
+	div.innerHTML = '';
 	box = element_new('div');
 	box.innerHTML = file.name + '<br>' + ((file.size - 16) >> 10) + 'kb';
 	div.appendChild(box);
 	box = element_new('div');
 	box.innerHTML = 'Mapper ' + mapper_id + '<br>' + mapper_type;
 	div.appendChild(box);
-	output.appendChild(div);
 	box = element_new('div');
 	box.innerHTML = 'PRG ' + data[4] * 16 + 'kb<br>' + chr_bank_kb_size + 'kb &times; ' + prg_banks + ' banks';
 	div.appendChild(box);
-	output.appendChild(div);
 	box = element_new('div');
 	box.innerHTML = 'CHR ' + data[4] * 16 + 'kb<br>' + chr_bank_kb_size + 'kb &times; ' + chr_banks + ' banks';
 	div.appendChild(box);
-	header.appendChild(div);
 
 	// draw some chr banks
 	div = element_new('div');
