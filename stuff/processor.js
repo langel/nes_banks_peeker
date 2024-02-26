@@ -1,6 +1,4 @@
 
-const theme = themes.cool;
-
 const process_canvas_from_chr_bank = async (data, offset, size) => {
 }
 const process_canvas_from_prg_bank = async (data, offset, size) => {
@@ -8,6 +6,7 @@ const process_canvas_from_prg_bank = async (data, offset, size) => {
 
 const processor_engine_go = async () => {
 	let div, box;
+	output.innerHTML = '';
 	// read header info
 	let mapper_id, prg_size, chr_size;
 	if (data[0] == 0x4e && data[1] == 0x45 && data[2] == 0x53 && data[3] == 0x1a) {
@@ -45,7 +44,7 @@ const processor_engine_go = async () => {
 	box.innerHTML = 'PRG ' + data[4] * 16 + 'kb<br>' + chr_bank_kb_size + 'kb &times; ' + prg_banks + ' banks';
 	div.appendChild(box);
 	box = element_new('div');
-	box.innerHTML = 'CHR ' + data[4] * 16 + 'kb<br>' + chr_bank_kb_size + 'kb &times; ' + chr_banks + ' banks';
+	box.innerHTML = 'CHR ' + data[5] * 8 + 'kb<br>' + chr_bank_kb_size + 'kb &times; ' + chr_banks + ' banks';
 	div.appendChild(box);
 
 	// draw some chr banks
