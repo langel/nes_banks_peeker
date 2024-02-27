@@ -1,7 +1,7 @@
 
-const process_canvas_from_chr_bank = async (data, offset, size) => {
+const process_canvas_from_chr_bank = async (offset, size) => {
 }
-const process_canvas_from_prg_bank = async (data, offset, size) => {
+const process_canvas_from_prg_bank = async (offset, size) => {
 }
 
 const processor_engine_go = async () => {
@@ -39,16 +39,16 @@ const processor_engine_go = async () => {
 	// show rom stats in header
 	div = document.getElementById('stats');
 	div.innerHTML = '';
-	box = element_new('div');
+	box = element_new('td');
 	box.innerHTML = file.name + '<br>' + ((file.size - 16) >> 10) + 'kb';
 	div.appendChild(box);
-	box = element_new('div');
+	box = element_new('td');
 	box.innerHTML = 'Mapper ' + mapper_id + '<br>' + mapper_type;
 	div.appendChild(box);
-	box = element_new('div');
+	box = element_new('td');
 	box.innerHTML = 'PRG ' + data[4] * 16 + 'kb<br>' + prg_bank_kb_size + 'kb &times; ' + prg_banks + ' banks';
 	div.appendChild(box);
-	box = element_new('div');
+	box = element_new('td');
 	box.innerHTML = 'CHR ' + data[5] * 8 + 'kb<br>' + chr_bank_kb_size + 'kb &times; ' + chr_banks + ' banks';
 	div.appendChild(box);
 

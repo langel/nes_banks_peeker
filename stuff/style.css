@@ -3,6 +3,7 @@
 	--yellow: #eed202;
 	--dark: #2c2c2c;
 	--light: #c2c2c2;
+	--header_content: 80px;
 }
 html, body {
 	background: var(--dark);
@@ -29,18 +30,18 @@ header {
 	justify-content: space-between;
 	align-items: flex-end;
 }
-header #logo { height: 80px; }
-header #stats {
-	display: flex;
-	justify-content: space-between;
-	align-items: flex-end;
-	gap: 12px;
+header #logo { height: var(--header_content); }
+header #stats { height: var(--header_content); }
+header #stats td { 
+	vertical-align: bottom; 
+	max-width: 15%;
+	word-break: break-word;
+	padding: 0 12px;
 }
 footer {
 	bottom: 0;
 }
-#containment {
-}
+#containment {}
 #output {
 	background: #1f1f1f;
 	margin: 24px;
