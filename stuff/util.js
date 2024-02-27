@@ -7,6 +7,8 @@ let localset = (key, val) => localStorage.setItem(key, val);
 let tobottom = () => window.scrollTo(0, document.body.scrollHeight);
 let tohex = (x) => x.toString(16).padStart(2, '0'); 
 
+let bitcolors = [ 0, 85, 170, 255 ];
+
 mapnick = [ 'NROM', 'MMC1', 'UNROM', 'CNROM', 'MMC3', 'MMC5', 'Super Magic Card', 'AxROM', 
             'Super Magic Card', 'MMC2', 'MMC4', 'Color Dreams', 'Gouder', 'CPROM', 'Gouder', 
 				'K-1029/K-1030P', 'Bandai FCG', 'Super Magic Card', 'Jaleco SS 88006', 

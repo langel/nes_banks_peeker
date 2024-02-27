@@ -1,7 +1,46 @@
 
-const process_canvas_from_chr_bank = async (offset, size) => {
+const process_canvas_from_chr_bank = async (ptr, chr_count) => {
+	let can = document.createElement("canvas");
+	can.width = 128;
+	can.height = chr_count >> 1;
+	let con = can.getContext("2d", { willReadFrequently: true });
+	// each character pattern
+	for (let j = 0; j < chr_count; j++) {
+		let x = (j % 16) << 3;
+		let y = (j >> 4) << 3;
+		let indirect = ptr + (j << 4);
+		// each row
+		for (let k = 0; k < 8; k++) {
+			let lo = data[indirect + k];
+			let hi = data[indirect + k + 8];
+			// each pixel
+			for (let l = 7; l >= 0; l--) {
+				let val = (lo & (1 << l)) ? 1 : 0;
+				val |= (hi & (1 << l)) ? 2 : 0;
+				val = bitcolors[val];
+				con.fillStyle = theme[val];
+				con.fillRect(x + 7 - l, y + k, 1, 1);
+			}
+		}
+	}
+	can.style.width = (can.width * scale) + 'px';
+	can.style.height = (can.height * scale) + 'px';
+	return can;
 }
-const process_canvas_from_prg_bank = async (offset, size) => {
+const process_canvas_from_prg_bank = async (ptr, prg_bank_size) => {
+	let can = document.createElement("canvas");
+	can.width = prg_byte_width;
+	can.height = prg_bank_size / prg_byte_width;
+	let con = can.getContext("2d", { willReadFrequently: true });
+	for (let j = 0; j < prg_bank_size; j++) {
+		con.fillStyle = theme[data[ptr + j]];
+		con.fillRect(j % prg_byte_width, Math.floor(j / prg_byte_width), 1, 1);
+	}
+	let prg_scale = scale;
+	if (prg_2x_chr == true) prg_scale *= 2;
+	can.style.width = (can.width * prg_scale) + 'px';
+	can.style.height = (can.height * prg_scale) + 'px';
+	return can;
 }
 
 const processor_engine_go = async () => {
@@ -53,66 +92,39 @@ const processor_engine_go = async () => {
 	div.appendChild(box);
 
 	// draw some chr banks
-	div = element_new('div');
-	div.classList.add("flex");
-	output.appendChild(div);
-	let bitcolors = [ 0, 85, 170, 255 ]
-	for (let i = 0; i < chr_banks; i++) {
-		let bank = element_new('div');
-		bank.innerHTML = "<span class='monospace'>CHR $" + tohex(i) + "</span></br>";
-		let can = document.createElement("canvas");
-		can.width = 128;
-		can.height = chr_bank_size >> 5;
-		let con = can.getContext("2d", { willReadFrequently: true });
-		let ptr = 16 + prg_banks * prg_bank_size + i * chr_bank_size
-		let chr_count = chr_bank_size >> 4;
-		// each character pattern
-		for (let j = 0; j < chr_count; j++) {
-			let x = (j % 16) << 3;
-			let y = (j >> 4) << 3;
-			let indirect = ptr + (j << 4);
-			// each row
-			for (let k = 0; k < 8; k++) {
-				let lo = data[indirect + k];
-				let hi = data[indirect + k + 8];
-				// each pixel
-				for (let l = 7; l >= 0; l--) {
-					let val = (lo & (1 << l)) ? 1 : 0;
-					val |= (hi & (1 << l)) ? 2 : 0;
-					val = bitcolors[val];
-					con.fillStyle = theme[val];
-					con.fillRect(x + 7 - l, y + k, 1, 1);
-				}
-			}
+	if (chr_banks > 0) {
+		div = element_new('div');
+		div.classList.add("flex");
+		output.appendChild(div);
+		for (let i = 0; i < chr_banks; i++) {
+			let bank = element_new('div');
+			bank.innerHTML = "<span class='monospace'>CHR $" + tohex(i) + "</span></br>";
+			let ptr = 16 + prg_banks * prg_bank_size + i * chr_bank_size
+			let chr_count = chr_bank_size >> 4;
+			let can = await process_canvas_from_chr_bank(ptr, chr_count);
+			bank.appendChild(can);
+			div.appendChild(bank);
+			await frame_next();
+			tobottom();
 		}
-
-		can.style.width = (can.width * scale) + 'px';
-		can.style.height = (can.height * scale) + 'px';
-		bank.appendChild(can);
-		div.appendChild(bank);
-		await frame_next();
-		tobottom();
 	}
-
+	// new flex box?
+	if (chr_banks + prg_banks > 6 || chr_banks == 0) {
+		div = element_new('div');
+		div.classList.add("flex");
+		output.appendChild(div);
+	}
 	// draw some prg banks
-	div = element_new('div');
-	div.classList.add("flex");
-	output.appendChild(div);
 	for (let i = 0; i < prg_banks; i++) {
 		let bank = element_new('div');
 		bank.innerHTML = "<span class='monospace'>PRG $" + tohex(i) + "</span></br>";
-		let can = document.createElement("canvas");
-		can.width = 64;
-		can.height = prg_bank_size >> 6;
-		let con = can.getContext("2d", { willReadFrequently: true });
 		let ptr = 16 + i * prg_bank_size;
-		for (let j = 0; j < prg_bank_size; j++) {
-			con.fillStyle = theme[data[ptr + j]];
-			con.fillRect(j % 64, j >> 6, 1, 1);
+		let can;
+		if (!prg_as_chr) {
+			can = await process_canvas_from_prg_bank(ptr, prg_bank_size);
+		} else {
+			can = await process_canvas_from_chr_bank(ptr, prg_bank_size / 16);
 		}
-
-		can.style.width = (can.width * 2) + 'px';
-		can.style.height = (can.height * 2) + 'px';
 		bank.appendChild(can);
 		div.appendChild(bank);
 		await frame_next();

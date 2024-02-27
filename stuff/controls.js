@@ -39,10 +39,6 @@ theme = themes[theme];
 
 // scale
 scale = localget('nbp_scale');
-const scale_set = () => {
-	localset('nbp_scale', scale);
-	css.insertRule('canvas { width: ' + scale + '00%; height ' + scale + '00%; }', 0);
-}
 let scale_select = element_new('select');
 for (let i = 1; i < 5; i++) {
 	let option = element_new('option');
@@ -53,11 +49,12 @@ for (let i = 1; i < 5; i++) {
 }
 scale_select.onchange = () => {
 	scale = Number(scale_select.value);
-	scale_set();
+	localset('nbp_scale', scale);
+	processor_engine_go();
 }
 div = document.getElementById('moption_scale');
 div.appendChild(scale_select);
-scale_set();
+localset('nbp_scale', scale);
 
 // prg byte width
 prg_byte_width = localget('nbp_prg_byte_width');
@@ -76,6 +73,7 @@ prg_byte_width_options.forEach((val) => {
 prg_byte_width_select.onchange = () => {
 	prg_byte_width = Number(prg_byte_width_select.value);
 	localset('nbp_prg_byte_width', prg_byte_width);
+	processor_engine_go();
 }
 div = document.getElementById('moption_prg_byte_width');
 div.appendChild(prg_byte_width_select);
@@ -88,6 +86,7 @@ prg_as_chr_box.onchange = () => {
 	prg_as_chr = !prg_as_chr;
 	prg_as_chr_box.checked = prg_as_chr;
 	localset('npb_prg_as_chr', prg_as_chr);
+	processor_engine_go();
 }
 
 // display prg 2x chr
@@ -98,4 +97,5 @@ prg_2x_chr_box.onchange = () => {
 	prg_2x_chr = !prg_2x_chr;
 	prg_2x_chr_box.checked = prg_2x_chr;
 	localset('npb_prg_2x_chr', prg_2x_chr);
+	processor_engine_go();
 }

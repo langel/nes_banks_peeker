@@ -55,6 +55,7 @@ footer {
 	margin: 24px;
 	gap: 24px;
 	align-items: flex-start;
+	justify-content: space-evenly;
 }
 .flex div {
 	overflow: auto;
