@@ -7,7 +7,7 @@ let themes_con = document.getElementById('themes');
 // if uninitialized setup default control settings
 if (localget('nbp_init') == undefined) {
 	localset('nbp_init', true);
-	localset('nbp_theme', 'cool');
+	localset('nbp_theme', 'sepia');
 	localset('nbp_scale', 2);
 	localset('prg_as_chr', false);
 	localset('prg_2x_chr', true);

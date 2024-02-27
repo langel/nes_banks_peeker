@@ -2,7 +2,7 @@ let file, data, output;
 
 window.addEventListener("DOMContentLoaded", () => {
 	const droptarg = document;
-	const cont = document.getElementById("containment");
+	const cont = document.body;
 	const domp = new DOMParser();
 	output = document.getElementById("output");
 	// drop handler
