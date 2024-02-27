@@ -11,7 +11,7 @@ if (localget('nbp_init') == undefined) {
 	localset('nbp_scale', 2);
 	localset('nbp_prg_byte_width', 64);
 	localset('npb_prg_as_chr', false);
-	localset('npb_prg_2x_chr', true);
+	localset('npb_prg_2x_chr', false);
 }
 
 // dynamic css
