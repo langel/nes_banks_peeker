@@ -5,8 +5,11 @@ const process_canvas_from_prg_bank = async (data, offset, size) => {
 }
 
 const processor_engine_go = async () => {
+	if (typeof file == 'undefined') return;
+
 	let div, box;
 	output.innerHTML = '';
+
 	// read header info
 	let mapper_id, prg_size, chr_size;
 	if (data[0] == 0x4e && data[1] == 0x45 && data[2] == 0x53 && data[3] == 0x1a) {
@@ -16,6 +19,7 @@ const processor_engine_go = async () => {
 	}
 	else return output.innerHTML += 'ROM FAIL :: ' + file.name;
 
+	// get bank info
 	let mapper_type = 'undefined';
 	let prg_bank_kb_size = 16;
 	let chr_bank_kb_size = 8;
@@ -32,6 +36,7 @@ const processor_engine_go = async () => {
 	let prg_bank_size = prg_bank_kb_size * 1024;
 	let chr_bank_size = chr_bank_kb_size * 1024;
 
+	// show rom stats in header
 	div = document.getElementById('stats');
 	div.innerHTML = '';
 	box = element_new('div');
@@ -41,7 +46,7 @@ const processor_engine_go = async () => {
 	box.innerHTML = 'Mapper ' + mapper_id + '<br>' + mapper_type;
 	div.appendChild(box);
 	box = element_new('div');
-	box.innerHTML = 'PRG ' + data[4] * 16 + 'kb<br>' + chr_bank_kb_size + 'kb &times; ' + prg_banks + ' banks';
+	box.innerHTML = 'PRG ' + data[4] * 16 + 'kb<br>' + prg_bank_kb_size + 'kb &times; ' + prg_banks + ' banks';
 	div.appendChild(box);
 	box = element_new('div');
 	box.innerHTML = 'CHR ' + data[5] * 8 + 'kb<br>' + chr_bank_kb_size + 'kb &times; ' + chr_banks + ' banks';
@@ -81,8 +86,8 @@ const processor_engine_go = async () => {
 			}
 		}
 
-		can.style.width = (can.width * 2) + 'px';
-		can.style.height = (can.height * 2) + 'px';
+		can.style.width = (can.width * scale) + 'px';
+		can.style.height = (can.height * scale) + 'px';
 		bank.appendChild(can);
 		div.appendChild(bank);
 		await frame_next();
