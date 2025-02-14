@@ -13,10 +13,19 @@ mapnick = [ 'NROM', 'MMC1', 'UNROM', 'CNROM', 'MMC3', 'MMC5', 'Super Magic Card'
             'Super Magic Card', 'MMC2', 'MMC4', 'Color Dreams', 'Gouder', 'CPROM', 'Gouder', 
 				'K-1029/K-1030P', 'Bandai FCG', 'Super Magic Card', 'Jaleco SS 88006', 
 				'Namco 129/163', 'FDS', 'VRC2/VRC4', 'VRC2/VRC4', 'VRC2/VRC4', 'VRC6', 'VRC2/VRC4', 
-				'VRC6', 'Pir8 VRC4', 'Action 53', 'CUFROM', 'UNROM 512', 'NSF Comp' ];
+				'VRC6', 'Pir8 VRC4', 'Action 53', 'CUFROM', 'UNROM 512', 'NSF Comp',
+				'Irem G-101', 'Taito\'s TC0190', 'BNROM/NINA'];
+
 mapprg = [      16,     16,     16,       32,      8,      8,         8,              32,  
                    8,             8,       16,    32,              8,          32,     8, 
-                16, 16, 8, 8, 8, 16, 8, 8, 8, 8, 8, 8, 8, 16, 16, 16, 4 ];
+                16,              16,              8,                 8, 
+					 8,             16,       8,          8,           8,           8,      8, 
+					 8,        8,          16,         16,      16,         4,
+					 8,               8,             32];
+
 mapchr = [      8,      8,      8,       8,      1,      1,            1,            8,               
                 1,                4,       4,           8,          8,        4,      1,  
-                8,  1, 8, 1, 1,  8, 1, 1, 1, 1, 1, 1, 1,  8,  8,  8, 8 ];
+                8,                1,              8,                 1, 
+					 1,             8,       1,          1,            1,         1,        1, 
+					 1,       1,          8,         8,         8,          8,
+					 1,          1,                  8];
