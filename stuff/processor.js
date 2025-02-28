@@ -90,6 +90,8 @@ const processor_engine_go = async () => {
 	box = element_new('td');
 	box.innerHTML = 'CHR ' + data[5] * 8 + 'kb<br>' + chr_bank_kb_size + 'kb &times; ' + chr_banks + ' banks';
 	div.appendChild(box);
+	
+	const tooltip = document.getElementById("tooltip");
 
 	// draw some chr banks
 	if (chr_banks > 0) {
@@ -102,6 +104,22 @@ const processor_engine_go = async () => {
 			let ptr = 16 + prg_banks * prg_bank_size + i * chr_bank_size
 			let chr_count = chr_bank_size >> 4;
 			let can = await process_canvas_from_chr_bank(ptr, chr_count);
+			can.addEventListener("mousemove", (e) => {
+				const rect = can.getBoundingClientRect();
+				const x = e.clientX - rect.left;
+				const y = e.clientY - rect.top;
+				tooltip.style.left = `${e.pageX}px`;
+				tooltip.style.top = `${e.pageY + 16}px`;
+				const tile_id = tohex(
+					((x / scale) >> 3) +
+					(((y / scale) >> 3) << 4)
+				);
+				tooltip.innerText = `$${tile_id}`;
+				tooltip.style.display = "block";
+			});
+			can.addEventListener("mouseleave", () => {
+				tooltip.style.display = "none";
+			});
 			bank.appendChild(can);
 			div.appendChild(bank);
 			await frame_next();
@@ -122,6 +140,22 @@ const processor_engine_go = async () => {
 		let can;
 		if (!prg_as_chr) {
 			can = await process_canvas_from_prg_bank(ptr, prg_bank_size);
+			can.addEventListener("mousemove", (e) => {
+				const rect = can.getBoundingClientRect();
+				const x = Math.max(0, e.clientX - rect.left);
+				const y = Math.max(0, e.clientY - rect.top);
+				tooltip.style.left = `${e.pageX}px`;
+				tooltip.style.top = `${e.pageY + 16}px`;
+				const address = tohex(Math.floor(
+					(x / (prg_2x_chr ? scale*2 : scale)) +
+					Math.floor(y / (prg_2x_chr ? scale*2 : scale)) * prg_byte_width
+				));
+				tooltip.innerText = `$${address}`;
+				tooltip.style.display = "block";
+			});
+			can.addEventListener("mouseleave", () => {
+				tooltip.style.display = "none";
+			});
 		} else {
 			can = await process_canvas_from_chr_bank(ptr, prg_bank_size / 16);
 		}

@@ -81,6 +81,15 @@ canvas {
 	z-index: 9001;
 }
 
+#tooltip {
+	position: absolute;
+	background-color: var(--dark);
+	color: var(--light);
+	border: 1px solid black;
+	border-radius: 4px;
+	padding: 4px 8px;
+	display: none;
+}
 
 select {
 	appearance: none;
@@ -89,7 +98,6 @@ select {
 	border: 1px solid black;
 	border-radius: 4px;
 	cursor: pointer;
-	padding: 4px 2px;
 }
 
 #moptions {
