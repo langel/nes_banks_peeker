@@ -140,22 +140,7 @@ const processor_engine_go = async () => {
 		let can;
 		if (!prg_as_chr) {
 			can = await process_canvas_from_prg_bank(ptr, prg_bank_size);
-			can.addEventListener("mousemove", (e) => {
-				const rect = can.getBoundingClientRect();
-				const x = Math.max(0, e.clientX - rect.left);
-				const y = Math.max(0, e.clientY - rect.top);
-				tooltip.style.left = `${e.pageX}px`;
-				tooltip.style.top = `${e.pageY + 16}px`;
-				const address = tohex(Math.floor(
-					(x / (prg_2x_chr ? scale*2 : scale)) +
-					Math.floor(y / (prg_2x_chr ? scale*2 : scale)) * prg_byte_width
-				));
-				tooltip.innerText = `$${address}`;
-				tooltip.style.display = "block";
-			});
-			can.addEventListener("mouseleave", () => {
-				tooltip.style.display = "none";
-			});
+			prg_bank_tooltip(can, i * prg_bank_size);
 		} else {
 			can = await process_canvas_from_chr_bank(ptr, prg_bank_size / 16);
 		}
@@ -165,4 +150,22 @@ const processor_engine_go = async () => {
 		tobottom();
 	}
 
+}
+
+
+const prg_bank_tooltip = (can, bank_addr) => {
+	can.addEventListener("mousemove", (e) => {
+		const rect = can.getBoundingClientRect();
+		const x = Math.max(0, e.clientX - rect.left);
+		const y = Math.max(0, e.clientY - rect.top);
+		tooltip.style.left = `${e.pageX}px`;
+		tooltip.style.top = `${e.pageY + 16}px`;
+		const address = Math.floor(x / (prg_2x_chr ? scale*2 : scale)) + Math.floor(y / (prg_2x_chr ? scale*2 : scale)) * prg_byte_width;
+		const value = tohex(data[address + 16 + bank_addr]);
+		tooltip.innerText = `$${tohex16(address)}::$${(value)}`;
+		tooltip.style.display = "block";
+	});
+	can.addEventListener("mouseleave", () => {
+		tooltip.style.display = "none";
+	});
 }

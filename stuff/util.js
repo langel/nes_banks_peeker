@@ -6,6 +6,7 @@ let localget = (key) => localStorage.getItem(key);
 let localset = (key, val) => localStorage.setItem(key, val);
 let tobottom = () => window.scrollTo(0, document.body.scrollHeight);
 let tohex = (x) => x.toString(16).padStart(2, '0'); 
+let tohex16 = (x) => x.toString(16).padStart(4, '0'); 
 
 let bitcolors = [ 0, 85, 170, 255 ];
 
